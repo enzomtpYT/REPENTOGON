@@ -8,7 +8,7 @@ LUA_FUNCTION(Lua_EntityAddBleeding)
 	Entity* ent = lua::GetUserdata<Entity*>(L, 1, lua::Metatables::ENTITY, "Entity");
 	EntityRef* ref = lua::GetUserdata<EntityRef*>(L, 2, lua::Metatables::ENTITY_REF, "EntityRef");
 	int duration = (int)luaL_checkinteger(L, 3);
-	ent->AddBleeding(*ref, duration);
+	ent->AddBleeding(*ref, duration, false);
 	return 0;
 }
 
@@ -17,7 +17,7 @@ LUA_FUNCTION(Lua_EntityAddMagnetized)
 	Entity* ent = lua::GetUserdata<Entity*>(L, 1, lua::Metatables::ENTITY, "Entity");
 	EntityRef* ref = lua::GetUserdata<EntityRef*>(L, 2, lua::Metatables::ENTITY_REF, "EntityRef");
 	int duration = (int)luaL_checkinteger(L, 3);
-	ent->AddMagnetized(*ref, duration);
+	ent->AddMagnetized(*ref, duration, false);
 	return 0;
 }
 
@@ -26,7 +26,7 @@ LUA_FUNCTION(Lua_EntityAddBaited)
 	Entity* ent = lua::GetUserdata<Entity*>(L, 1, lua::Metatables::ENTITY, "Entity");
 	EntityRef* ref = lua::GetUserdata<EntityRef*>(L, 2, lua::Metatables::ENTITY_REF, "EntityRef");
 	int duration = (int)luaL_checkinteger(L, 3);
-	ent->AddBaited(*ref, duration);
+	ent->AddBaited(*ref, duration, false);
 	return 0;
 }
 
@@ -259,8 +259,7 @@ LUA_FUNCTION(Lua_EntityGetPredictedTargetPosition) {
 	Entity* entity = lua::GetUserdata<Entity*>(L, 1, lua::Metatables::ENTITY, "Entity");
 	Entity* target = lua::GetUserdata<Entity*>(L, 2, lua::Metatables::ENTITY, "Entity");
 	const float delay = (float)luaL_checknumber(L, 3);
-	Vector res;
-	entity->GetPredictedTargetPosition(&res, target, delay);
+	Vector res = entity->GetPredictedTargetPosition(target, delay);
 
 	lua::luabridge::UserdataPtr::push(L, &res, lua::GetMetatableKey(lua::Metatables::VECTOR));
 
@@ -306,7 +305,7 @@ LUA_FUNCTION(Lua_EntityMakeBloodPoof) {
 	
 	ColorMod color;
 	if (lua_type(L, 3) == LUA_TUSERDATA) {
-		color = *lua::GetUserdata<ColorMod*>(L, 2, lua::Metatables::COLOR, "Color");
+		color = *lua::GetUserdata<ColorMod*>(L, 3, lua::Metatables::COLOR, "Color");
 	}
 	
 	float scale = (float)luaL_optnumber(L, 4, 1.0f);
@@ -332,7 +331,7 @@ LUA_FUNCTION(Lua_EntityMakeGroundPoof) {
 
 	ColorMod color;
 	if (lua_type(L, 3) == LUA_TUSERDATA) {
-		color = *lua::GetUserdata<ColorMod*>(L, 2, lua::Metatables::COLOR, "Color");
+		color = *lua::GetUserdata<ColorMod*>(L, 3, lua::Metatables::COLOR, "Color");
 	}
 
 	float scale = (float)luaL_optnumber(L, 4, 1.0f);
