@@ -4019,8 +4019,8 @@ HOOK_METHOD(Entity_Pickup, GetLootList, (bool shouldAdvance, Entity_Player* play
 }
 
 //MC_POST_PLAYER_TRIGGER_EFFECT_REMOVED (1268)
-HOOK_METHOD(Entity_Player, TriggerEffectRemoved, (ItemConfig_Item* item, int unused) -> void) {
-	super(item, unused);
+HOOK_METHOD(Entity_Player, TriggerEffectRemoved, (ItemConfig_Item* item, int count) -> void) {
+	super(item, count);
 	const int callbackid = 1268;
 	if (CallbackState.test(callbackid - 1000)) {
 		lua_State* L = g_LuaEngine->_state;
@@ -4030,6 +4030,7 @@ HOOK_METHOD(Entity_Player, TriggerEffectRemoved, (ItemConfig_Item* item, int unu
 			.pushnil()
 			.push(this, lua::Metatables::ENTITY_PLAYER)
 			.push(item, lua::Metatables::ITEM)
+			.push(count)
 			.call(1);
 	}
 }
